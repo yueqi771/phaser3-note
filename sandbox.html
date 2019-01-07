@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>sandbox</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body{
+        overflow: auto!important;
+    }
+    .phaser-wrapper{
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+
+    </div>
+
+</body>
+
+<script>
+    let config = {
+        type: Phaser.auto,
+        parent: 'phaser_wrapper',
+        width: 1178,
+        height: 800,
+        scene: {
+            preload: preload,
+            create: create,
+        }
+    }
+
+    let game = new Phaser.Game(config);
+
+    function preload() {
+        this.load.setBaseURL('http://labs.phaser.io');
+        this.load.image('map', 'assets/tests/camera/earthbound-scarab.png');
+    }
+
+    function create() {
+        // 设置相机的边界
+        this.cameras.main.setBounds(0, 0, 1024, 2048);
+
+        // 添加图像
+        this.add.image(0, 0, 'map').setOrigin(0);
+
+        // 移动相机，使其以给定坐标为中心，允许边界。
+        this.cameras.main.centerOn(0, 0)
+
+        // 添加文字
+        this.add.text(0, 0).setText('Game1').setScrollFactor(0).setShadow(1, 1, '#000000', 2);
+
+        // 监听鼠标按下事件
+        let pos = 0, currentPostion = [{x: 0, y: 0}];
+
+        // 方向变量
+        let direction = 0;
+
+        this.input.on('pointerdown', function(e) {
+            
+           
+            console.log(direction)
+        })
+    
+        /*
+        */
+        this.input.on('pointerdown', function(e) {
+            let cameras = this.cameras.main;
+
+            let prevPostion = currentPostion;
+            
+            currentPostion = e.getInterpolatedPosition();
+            debugger
+
+            let x = currentPostion[0].x - prevPostion[0].x,
+                y = currentPostion[0].y - prevPostion[0].y,
+                cameraX = cameras.centerX,
+                cameraY = cameras.centerY;
+            
+            direction = Math.round( ( ( ( Math.atan2( y, x ) * ( 180 / Math.PI ) ) + 180 ) / 90) + 3 ) % 4;
+            
+            // 上(0) 右(1) 下(2) 左(3)
+            if (direction === 0)
+            {
+                cameras.pan(cameraX + 100, cameraY + 0, 2000, 'Power2');
+            }
+            else if (direction === 1)
+            {
+                cameras.pan(cameraX + 0, cameraY + 100, 2000, 'Elastic');
+                pos++;
+            }
+
+            else if (direction === 2)
+            {
+                cameras.pan(cameraX + 256, cameraY + 623, 2000, 'Sine.easeInOut');
+                cameras.zoomTo(1, 3000);
+                pos++;
+            }
+            else if (direction === 3)
+            {
+                cameras.pan(cameraX + 166, cameraY + 304, 2000);
+                cameras.zoomTo(4, 1500);
+                pos++;
+            }
+            else if (direction === 4)
+            {
+                cameras.pan(cameraX + 624, cameraY + 158, 2000);
+                cameras.zoomTo(0.5, 3000);
+                pos++;
+            }
+            else if (pos === 5)
+            {
+                cameras.pan(cameraX + 680, cameraY + 330, 2000);
+                pos++;
+            }
+            else if (pos === 6)
+            {
+                cameras.pan(cameraX + 748, cameraY + 488, 2000);
+                pos++;
+            }
+            else if (pos === 7)
+            {
+                cameras.pan(cameraX + 1003,cameraY +  1719, 2000);
+                pos = 0;
+            }
+        }, this)
+
+
+    }
+    
+
+    // 判断鼠标移动方向
+    
+    function direction(wrap){
+        var wrap = document.getElementById(wrap);
+        var hoverDir = function(e){
+            var w = wrap.offsetWidth,
+                h = wrap.offsetHeight,
+                x = ( e.clientX - wrap.offsetLeft - ( w / 2 ) ) * ( w > h ? ( h / w ) : 1 ),
+                y = (e.clientY - wrap.offsetTop - (h / 2)) * (h > w ? (w / h) : 1),
+                // 上(0) 右(1) 下(2) 左(3)
+                direction = Math.round( ( ( ( Math.atan2( y, x ) * ( 180 / Math.PI ) ) + 180 ) / 90) + 3 ) % 4,
+                eventType = e.type,
+                dirName = new Array('上方','右侧','下方','左侧');
+            if( e.type == 'mouseover' || e.type == 'mouseenter' ){
+                wrap.innerHTML = dirName[direction] + '进入';
+            }else{
+                wrap.innerHTML = dirName[direction] + '离开';
+            }
+        }
+        if( window.addEventListener ){
+            wrap.addEventListener( 'mouseover',hoverDir,false );
+            wrap.addEventListener( 'mouseout',hoverDir,false );
+        }else if( window.attachEvent ){
+            wrap.attachEvent( 'onmouseenter',hoverDir );
+            wrap.attachEvent( 'onmouseleave',hoverDir );
+        }
+    }
+</script>
+</html>
