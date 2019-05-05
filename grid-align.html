@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>sandbox</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+
+    </div>
+
+</body>
+
+<script>
+    /**
+     * @ques1 { phaser实例都有哪几种对象 }
+     * Phaser.Game实例是整个Phaser游戏的主控制器。它负责处理引导过程，解析配置值，创建渲染器以及设置所有全局Phaser系统，例如声音和输入。一旦完成，它将启动场景管理器，然后开始主游戏循环。
+       您通常应该避免访问由Game创建的任何系统，而是使用通过Phaser.Scene Systems类提供给您的系统。
+
+     * @ques2 { this.load.spritesheet中， spritesheet什么意思 }
+       适合加载单个精灵图
+
+     * @ques3 { frameWidth什么意思 }
+       frameWidth： 图片帧的宽度（以像素为单位）。frameHeight： 帧的高度（以像素为单位）。frameWidth如果未提供，则使用该值。
+     * @ques4 { this.add api }
+       this.add.group: 
+       创建一个新的组游戏对象并将其添加到场景中。
+       注意：只有在Phaser中内置了组游戏对象时，此方法才可用。
+     * @ques4 { Actions.GridAlign api }
+       获取一组游戏对象，或具有公共x和y属性的任何对象，然后根据为此操作提供的网格配置对齐它们。
+       
+     * @ques5 { 了解一下create方法和preload方法 }
+     * 
+     * 
+     * sprotesheet
+    */
+    window.onload = function () {
+        let config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: '#2d2d2d',
+            parent: "phaser_wrapper",
+            scene: {
+                preload: preload,
+                create: create
+            }
+        };
+
+        // 实例化一个pahser游戏对象， 
+        let game = new Phaser.Game(config);
+
+        function preload() {
+            this.load.spritesheet('diamonds', 'assets/sprites/diamonds32x24x5.png', { frameWidth: 32, frameHeight: 24 })
+        }
+
+        function create() {
+            var group = this.add.group({
+                key: 'diamonds',
+                frame: [0, 1, 2, 3, 4], // 加载多少组
+                frameQuantity: 20, // 加载多少个
+            })
+            Phaser.Actions.GridAlign(group.getChildren(), {
+                width: 10,  // 王哥宽度
+                height: 10, // 网格高度
+                cellWidth: 32, // 单元格宽度
+                cellHeight: 32, // 单元格高度
+                x: 100, // 距离左上角坐标
+                y: 100 // 距离右上角坐标
+            })
+        }
+
+        
+   }
+</script>
+
+</html>
