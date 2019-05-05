@@ -62,7 +62,7 @@
         let pos = 0, currentPostion = [{x: 0, y: 0}];
 
         // 方向变量
-        let direction = 0;
+        let direction = 2;
 
         this.input.on('pointerdown', function(e) {
             
@@ -79,34 +79,35 @@
             
             currentPostion = e.getInterpolatedPosition();
             debugger
-
             let x = currentPostion[0].x - prevPostion[0].x,
                 y = currentPostion[0].y - prevPostion[0].y,
                 cameraX = cameras.centerX,
                 cameraY = cameras.centerY;
             
-            direction = Math.round( ( ( ( Math.atan2( y, x ) * ( 180 / Math.PI ) ) + 180 ) / 90) + 3 ) % 4;
+            // direction = Math.round( ( ( ( Math.atan2( y, x ) * ( 180 / Math.PI ) ) + 180 ) / 90) + 3 ) % 4;
             
             // 上(0) 右(1) 下(2) 左(3)
             if (direction === 0)
             {
-                cameras.pan(cameraX + 100, cameraY + 0, 2000, 'Power2');
+                cameras.pan(cameraX + 0, cameraY - 100, 2000, 'Power2');
+                
             }
             else if (direction === 1)
             {
-                cameras.pan(cameraX + 0, cameraY + 100, 2000, 'Elastic');
+                cameras.pan(cameraX + 100, cameraY + 0, 2000, 'Elastic');
                 pos++;
             }
 
             else if (direction === 2)
             {
-                cameras.pan(cameraX + 256, cameraY + 623, 2000, 'Sine.easeInOut');
-                cameras.zoomTo(1, 3000);
+                cameras.pan(cameraX + 0, cameraY + 256, 2000, 'Sine.easeInOut');
+                // cameras.zoomTo(1, 3000);
+                cameras.centerOn(cameraX, cameraY + 256)
                 pos++;
             }
             else if (direction === 3)
             {
-                cameras.pan(cameraX + 166, cameraY + 304, 2000);
+                cameras.pan(cameraX - 166, cameraY + 0, 2000);
                 cameras.zoomTo(4, 1500);
                 pos++;
             }
