@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>layer</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body{
+        overflow: auto!important;
+    }
+    .phaser-wrapper{
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+
+    </div>
+
+</body>
+
+<script>
+    /** 
+     * @ques1 { scene接受的参数? }
+     * @ques2 { this.load.atlas atlas什么意思， 相关api? }
+     * 将基于Unity YAML的纹理图集或图集阵列添加到当前加载队列
+     * 
+     * @ques3 { this.add.group 相关api }
+     * 创建一个新的游戏对象组并将其添加到场景中。 
+     * 
+     * @ques4 { group.create  相关api }
+     * @paes5 { Phaser.Actions.IncX 相关api }
+    */
+    window.onload = function() {
+        let config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: '#2d2d2d',
+            parent: 'phaser_wrapper',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update,
+            }
+        }
+
+        let groupA, groupB, move = 0;
+
+        const game = new Phaser.Game(config)
+
+        function preload() {
+            // 加载图片
+            this.load.atlas('atlas', 'assets/tests/fruit/veg.png', 'assets/tests/fruit/veg.json')
+        }
+
+        function create() {
+            groupA = this.add.group();
+            groupB = this.add.group();
+
+            for(var i = 0; i < 1000; i++ ) {
+                groupA.create(100 + Math.random() * 600, 100 + Math.random() * 400, 'atlas', 'veg0' + Math.floor(1 + Math.random() * 9));
+            }
+
+            console.log(groupA)
+
+            for (var i = 0; i < 1000; i++) {
+                groupB.create(100 + Math.random() * 600, 100 + Math.random() * 400, 'atlas', 'veg0' + Math.floor(1 + Math.random() * 9));
+            }
+
+
+        }
+
+        function update() {
+            // 更新动画的X值 Y值 旋转角度
+            Phaser.Actions.IncX(groupA.getChildren(), Math.cos(move));
+            Phaser.Actions.IncY(groupA.getChildren(), Math.sin(move));
+            Phaser.Actions.Rotate(groupA.getChildren(), -0.01);
+
+            Phaser.Actions.IncX(groupB.getChildren(), -Math.cos(move));
+            Phaser.Actions.IncY(groupB.getChildren(), -Math.sin(move));
+            Phaser.Actions.Rotate(groupB.getChildren(), 0.01);
+
+            move += 0.01
+        }
+    }
+</script>
+</html>
