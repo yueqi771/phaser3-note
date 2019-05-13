@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>circle-reserved</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+
+    </div>
+
+</body>
+
+<script>
+    /**
+     * ques1 { this.load.ball api }
+     * ques2 { new Phaser.Geom.Circle api}
+     * ques3 { Phaser.Actions.PlaceOnCircle }
+       获取一系列游戏对象并将它们放置在圆周周围的均匀间隔点上。
+     * ques4 { Phaser.Actions.RotateAroundDistance }
+       将游戏对象按给定角度和距离旋转
+    */
+    window.onload = function () {
+        let config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: '#2d2d2d',
+            parent: 'phaser_wrapper',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update,
+            }
+        }
+
+        const game = new Phaser.Game(config);
+
+        let group1, group2, group3, group4;
+
+        let circle1, circle2, circle3, circle4;
+
+        function preload() {
+            this.load.image('ball', 'assets/sprites/shinyball.png');
+        }
+
+        function create() {
+            group1 = this.add.group({key: 'ball', frameQuantity: 36});
+            group2 = this.add.group({key: 'ball', frameQuantity: 32});
+            group3 = this.add.group({key: 'ball', frameQuantity: 26});
+            group4 = this.add.group({key: 'ball', frameQuantity: 16});
+
+            // 创建一个圆形。 x, y, 半径
+            circle1 = new Phaser.Geom.Circle(400, 300, 200);
+            circle2 = new Phaser.Geom.Circle(400, 300, 160);
+            circle3 = new Phaser.Geom.Circle(400, 300, 120);
+            circle4 = new Phaser.Geom.Circle(400, 300, 80);
+
+            // 沿着圆形进行绘制
+            Phaser.Actions.PlaceOnCircle(group1.getChildren(), circle1);
+            Phaser.Actions.PlaceOnCircle(group2.getChildren(), circle2);
+            Phaser.Actions.PlaceOnCircle(group3.getChildren(), circle3);
+            Phaser.Actions.PlaceOnCircle(group4.getChildren(), circle4);
+        }
+
+        function update() {
+            // 沿着圆形进行旋转
+            Phaser.Actions.RotateAroundDistance(group1.getChildren(), circle1, -0.030, circle1.radius);
+            Phaser.Actions.RotateAroundDistance(group2.getChildren(), circle2, 0.025, circle2.radius);
+            Phaser.Actions.RotateAroundDistance(group3.getChildren(), circle3, -0.020, circle3.radius);
+            Phaser.Actions.RotateAroundDistance(group4.getChildren(), circle4, 0.015, circle4.radius);
+
+        }
+        
+    }
+</script>
+
+</html>
