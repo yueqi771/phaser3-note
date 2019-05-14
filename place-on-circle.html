@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>circle-reserved</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+
+    </div>
+
+</body>
+
+<script>
+    /**
+     * ques1 { this.tweens.addCounter 相关api }
+    */
+    window.onload = function() {
+        const config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: "#2d2d2d",
+            parent: 'phaser_wrapper',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update,
+            }
+        }
+
+        const game = new Phaser.Game(config);
+        let group, tween;
+
+        function preload() {
+            this.load.image('ball', 'assets/sprites/shinyball.png');
+        }
+
+        function create() {
+            // 创建一个圆形
+            const circle = new Phaser.Geom.Circle(400, 300, 260);
+            
+            // 建立一个组
+            group = this.add.group({ key: 'ball', frameQuantity: 32 });
+
+            // 将指定的元素沿着圆形进行绘制
+            Phaser.Actions.PlaceOnCircle(group.getChildren(), circle);
+
+            // 建立一个时间轴
+            tween = this.tweens.addCounter({
+                from: 260,
+                to: 0,
+                duration: 3000,
+                ease: 'Sine.easeInOut',
+                repeat: -1,
+                yoyo: true
+            })
+        }
+
+        function update() {
+            // 将制定元素绕一个圆形旋转
+            Phaser.Actions.RotateAroundDistance(group.getChildren(), { x: 400, y: 300 }, 0.02, tween.getValue());
+        }
+    }
+</script>
+
+</html>
