@@ -36,7 +36,7 @@
             width: 1178,
             height: 800,
             background: '2d2d2d',
-            parent: 'phaser_wrapper'
+            parent: 'phaser_wrapper',
             scene: {
                 preload,
                 create,
@@ -54,11 +54,33 @@
         }
 
         function create() {
+            // 绘制一个圆形
+            circle1 = new Phaser.Geom.Circle(400, 300, 260);
+            circle2 = new Phaser.Geom.Circle(400, 300, 200);
+            circle3 = new Phaser.Geom.Circle(400, 300, 160);
+            circle4 = new Phaser.Geom.Circle(400, 300, 100);
+
+            // 添加几个group
             group1 = this.add.group({ key:'ball', frameQuantity: 32 });
+            group2 = this.add.group({ key:'ball', frameQuantity: 26 });
+            group3 = this.add.group({ key:'ball', frameQuantity: 20 });
+            group4 = this.add.group({ key:'ball', frameQuantity: 14 });
+
+            // 将这几个group在圆形上绘制出来
+            Phaser.Actions.PlaceOnCircle(group1.getChildren(), circle1);
+            Phaser.Actions.PlaceOnCircle(group2.getChildren(), circle2);
+            Phaser.Actions.PlaceOnCircle(group3.getChildren(), circle3);
+            Phaser.Actions.PlaceOnCircle(group4.getChildren(), circle4);
+
 
         }
 
         function update() {
+            // 绕着圆形旋转
+            Phaser.Actions.RotateAroundDistance(group1.getChildren(), {x: 400, y: 300}, 0.02, 260);
+            Phaser.Actions.RotateAroundDistance(group2.getChildren(), {x: 400, y: 300}, 0.02, 200);
+            Phaser.Actions.RotateAroundDistance(group3.getChildren(), {x: 400, y: 300}, 0.02, 160);
+            Phaser.Actions.RotateAroundDistance(group4.getChildren(), {x: 400, y: 300}, 0.02, 100);
 
         }
 
