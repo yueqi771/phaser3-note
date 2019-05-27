@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>random-circle</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+
+    </div>
+
+</body>
+
+<script>
+    window.onload = function () {
+       const config = {
+           type: Phaser.AUTO,
+           widht: 1178,
+           height: 800,
+           background: '#2d2d2d',
+           parent: 'phaser_wrapper',
+           scene: {
+               preload: preload,
+               create: create
+           }
+        }
+
+        const game = new Phaser.Game(config);
+
+        function preload() {
+            this.load.image('orb', 'assets/sprites/orb-blue.png');
+        }
+
+        function create() {
+            var group = this.add.group({ key: 'orb', frameQuantity: 300 });
+
+            var circle = new Phaser.Geom.Circle(400, 300, 130);
+
+            Phaser.Actions.RandomCircle(group.getChildren(), circle);
+        }
+
+    }
+</script>
+
+</html>
