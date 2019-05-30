@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>rotate-around-xy</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+    </div>
+
+</body>
+
+<script>
+    window.onload = function () {
+        const config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: "#2d2d2d",
+            parent: 'phaser_wrapper',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        }
+
+        const game = new Phaser.Game(config);
+        let point;
+
+        function preload() {
+            this.load.spritesheet('diamonds', 'assets/sprites/diamonds32x24x5.png', { frameWidth: 32, frameHeight: 24 });
+        }
+
+        function create() {
+            group = this.add.group();
+            for(var i = 0; i < 256; i++) {
+                /**
+                 * @func   group.create: 创建一个新的游戏对象并将其添加到改组
+                 * @params group.create(x, y, key, frame(纹理))
+                */
+                group.create(Phaser.Math.Between(200, 600), Phaser.Math.Between(100, 500), 'diamonds', Phaser.Math.Between(0, 4))
+            }
+
+            // 创建一个点
+            point = new Phaser.Geom.Point(400, 300);
+
+            // 监听鼠标移动事件
+            this.input.on('pointermove', function(pointer) {
+                /**
+                 * @func point.setTo 将点设置为指定值
+                 * @params x, y
+                */
+
+                console.log('pointer --------')
+                console.log(pointer)
+
+                point.setTo(pointer.x, pointer.y);
+            })
+        }
+
+        function update() {
+            /**
+             * @func 将游戏对象数组按照给定的角度和距离旋转
+             * @params RotateAroundDistance(items(游戏对象数组), point(旋转中心), angle(弧度)， distance(旋转半径))
+            */
+            Phaser.Actions.RotateAroundDistance(group.getChildren(), point, 0.1, 100);
+        }
+    }
+</script>
+
+</html>
