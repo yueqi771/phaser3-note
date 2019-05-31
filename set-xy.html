@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>set-xy</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+    </div>
+
+</body>
+
+<script>
+    window.onload = function () {
+        const config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: "#2d2d2d",
+            parent: 'phaser_wrapper',
+            scene: {
+                preload: preload,
+                create: create,
+            }
+        }
+
+        const game = new Phaser.Game(config);
+
+        function preload() {
+            this.load.image('phaser', 'assets/sprites/phaser2.png');
+        }
+
+        function create() {
+            let group = this.add.group();
+
+            // 添加到场景中并且设置image的位置
+            const image = this.add.image(0, 0, 'phaser');
+
+            // 添加到组里面
+            group.add(image);
+
+            /**
+            * @func  Actions.SetXY: 给定游戏对象数组设置x, y 值
+            * @params SetXY(items(游戏对象), x, y, setX(X递增位置), setY(Y递增位置))
+            */
+            Phaser.Actions.SetXY(group.getChildren(), 400, 300);
+        }
+    }
+</script>
+
+</html>

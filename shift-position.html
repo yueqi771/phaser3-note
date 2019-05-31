@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>shift-position</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+    </div>
+
+</body>
+
+<script>
+    window.onload = function () {
+        const config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: "#2d2d2d",
+            parent: 'phaser_wrapper',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update,
+            }
+        }
+
+        const game = new Phaser.Game(config);
+
+        let x, y, group, move = 0;
+
+        function preload() {
+            this.load.image('sky', 'assets/skies/deepblue.png');
+            this.load.image('ball', 'assets/demoscene/ball-tlb.png');
+        }
+
+        function create() {
+            // 将sky图片添加到场景中 setOrigin, 设置游戏对象的原点（0-1）
+            this.add.image(0, 0, 'sky').setOrigin(0);
+
+            // 将球添加到场景中
+            group = this.add.group({ key: 'ball', frameQuantity: 128 });
+
+            // 监听鼠标移动事件
+            this.input.on('pointermove', function(pointer) {
+                x = pointer.x;
+                y = pointer.y;
+            })
+        }
+    
+        function update(time, delta) {
+            console.log('time', time);
+            console.log('delta', delta);
+
+            move += delta;
+
+            if(move > 6) {
+                /**
+                 * @func Phaser.Actions.ShiftPosition: 遍历游戏组， 将每个元素的位置更新为前一个元素的位置
+                 * @params items: 游戏对象数组
+                 * @params x: 第一个元素的x
+                 * @params y: 第一个元素的y
+                 * @params direction: 方向， 1 正向 -1 反向
+                 * @params outpu: 最终游戏对象的位置
+                */
+                Phaser.Actions.ShiftPosition(group.getChildren(), x, y);
+                move = 0;
+            }
+        }
+    }
+</script>
+
+</html>
