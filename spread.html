@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>spread</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+    </div>
+
+</body>
+
+<script>
+    window.onload = function () {
+        const config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: "#2d2d2d",
+            parent: 'phaser_wrapper',
+            scene: {
+                preload: preload,
+                create: create,
+            }
+        }
+
+        const game = new Phaser.Game(config);
+
+        function preload() {
+            this.load.spritesheet('diamonds', 'assets/sprites/diamonds32x24x5.png', { frameWidth: 32, frameHeight: 24 });
+        }
+
+        function create() {
+            group = this.add.group({ key: 'diamonds', frame: 3, frameQuantity: 50, setXY: { x: 32, y: 32, stepX: 14 } });
+
+            /**
+             * @func Phaser.Actions.Spread: 修改一组游戏对象的指定属性
+             * @params items: 游戏对象
+             * @params property: 游戏对象的属性
+             * @params min: 最小值
+             * @params max: 最大值
+             * @params inc: 是否递增
+            */
+           console.log(group.getChildren())
+           Phaser.Actions.Spread(group.getChildren(), 'alpha', 0, 1, false);
+           Phaser.Actions.Spread(group.getChildren(), 'scaleX', 1, 4, false);
+        }
+    }
+</script>
+
+</html>
