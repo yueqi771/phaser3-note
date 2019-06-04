@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>wrap=camera-bounds</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+    </div>
+
+</body>
+
+<script>
+    window.onload = function () {
+        const config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: "#2d2d2d",
+            parent: 'phaser_wrapper',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        }
+
+        const game = new Phaser.Game(config);
+
+        let graphics, rect, shapes;
+
+        function preload() {
+        }
+
+        function create() {
+            // 创建一个新的图形对象， 添加到场景中
+            graphics = this.add.graphics();
+
+            // 创建15个随机位置， 随机大小的圆形
+            shapes = new Array(15).fill(null).map(function(item, index) {
+                return new Phaser.Geom.Circle(Phaser.Math.Between(0, 800), Phaser.Math.Between(0, 600), Phaser.Math.Between(25, 75));
+            })
+
+            // 绘制一个正方形， 同相机大小
+            rect = Phaser.Geom.Rectangle.Clone(this.cameras.main);
+        }
+
+        function update() {
+            // 更改圆形的位置
+            shapes.forEach(function(shape, index) {
+                shape.x += (1 + 0.1 * index);
+                shape.y += (1 + 0.1 * index);
+            });
+
+            /**
+             * @func 将每个项目的坐标包裹在矩形区域内。
+             * @params items: 一系列游戏对象
+             * @params rect: 矩形
+             * @params padding：操作期间添加到矩形每侧的量
+
+            */
+            Phaser.Actions.WrapInRectangle(shapes, rect, 72);
+
+            draw();
+        } 
+
+        function draw() {
+            // 清空graphics数组
+            graphics.clear();
+
+            // 给shapes每个元素添加样式
+            shapes.forEach(function(shape, index) {
+                graphics.fillStyle(color(index), 0.5).fillCircleShape(shape);
+            })
+        }
+
+        function color(i) {
+            return 0x001100 * (i % 15) + 0x000033 * (i % 5);
+        }
+    }
+</script>
+
+</html>
