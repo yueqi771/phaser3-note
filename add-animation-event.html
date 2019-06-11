@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>wrap=camera-rectangle</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+</head>
+
+<style>
+    body {
+        overflow: auto !important;
+    }
+
+    .phaser-wrapper {
+        width: 1178px;
+        height: 800px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<body>
+    <div class="phaser-wrapper" id="phaser_wrapper">
+    </div>
+
+</body>
+
+<script>
+    window.onload = function () {
+        const config = {
+            type: Phaser.AUTO,
+            width: 1178,
+            height: 800,
+            backgroundColor: "#2d2d2d",
+            parent: 'phaser_wrapper',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        }
+
+        const game = new Phaser.Game(config);
+
+        let y = 100;
+
+        function preload() {
+            // 将基于JSON的纹理图集或图集阵列添加到当前加载队列。
+            this.load.atlas('gems', 'assets/tests/columns/gems.png', 'assets/tests/columns/gems.json');
+        }
+
+        
+        function create() {
+          
+        }
+
+        function update() {
+            
+        } 
+
+       
+    }
+</script>
+
+</html>
